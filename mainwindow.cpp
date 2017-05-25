@@ -9,7 +9,8 @@
 #include <QLabel>
 #include <QRgb>
 #include <QDebug>
-#include <iostream>
+#include <qdebug.h>
+#include <string>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -29,6 +30,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mainToolBar->addWidget(spinBox);
     blur_label=new QLabel;
     blur_flag = false;
+
+    Num = 0;
 }
 
 MainWindow::~MainWindow()
@@ -39,22 +42,26 @@ void MainWindow::on_action_N_triggered()
 {
     QFileDialog *fileDialog = new QFileDialog(this);
     fileDialog->setWindowTitle(tr("Open Image"));
+    fileDialog->setFileMode(QFileDialog::ExistingFiles);
     if(fileDialog->exec() == QDialog::Accepted) {
         gery_flag = false;
-         QString path = fileDialog->selectedFiles()[0];
-         before_img.load(path);
-         before_img = before_img.scaled(before_img.width()*0.5,before_img.height()*0.5);
-         blur_img1.load(path);
-         blur_img1 = blur_img1.scaled(blur_img1.width()*0.5,blur_img1.height()*0.5);
-         blur_img2.load(path);
-         blur_img2 = blur_img2.scaled(blur_img2.width()*0.5,blur_img2.height()*0.5);
-         QLabel *q = new QLabel;
-         q->setPixmap(QPixmap::fromImage(before_img));
-         q->setWindowTitle(path+"原图");
-         ui->mdiArea->addSubWindow(q);
-         q->setScaledContents(true);
-         q->resize(q->width(),q->height());
-         q->show();
+         for(QString path : fileDialog->selectedFiles()){
+             qDebug()<<path<<endl;
+             QImage img;
+             img.load(path);
+             Img.insert(make_pair(Num, img));
+             QStringList  s = path.split(".");
+             qDebug()<<s.last()<<endl;
+             QLabel *q = new QLabel;
+             Label.insert(make_pair(Num, q));
+             q->setPixmap(QPixmap::fromImage(img));
+             q->setWindowTitle("Unnamed");
+             qDebug()<<Num<<endl;
+             ui->mdiArea->addSubWindow(q);
+             q->setScaledContents(true);
+             q->resize(q->width(),q->height());
+             q->show();
+         }
     }
 }
 

@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QLabel>
+#include <map>
+using namespace std;
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +19,10 @@ public:
     QImage before_img,gery_img,blur_img1,blur_img2;
     QLabel *blur_label;
     bool blur_flag,gery_flag;
+
+    map<int, QImage> Img;
+    map<int, QLabel*> Label;
+    int Num;
     ~MainWindow();
 
 private slots:
