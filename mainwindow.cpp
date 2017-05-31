@@ -28,10 +28,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mainToolBar->addWidget(toolBtn);
     QSpinBox *spinBox = new QSpinBox(this);
     ui->mainToolBar->addWidget(spinBox);
-    blur_label=new QLabel;
-    blur_flag = false;
 
-    Num = 0;
+    Num = 1;
 }
 
 MainWindow::~MainWindow()
@@ -44,19 +42,22 @@ void MainWindow::on_action_N_triggered()
     fileDialog->setWindowTitle(tr("Open Image"));
     fileDialog->setFileMode(QFileDialog::ExistingFiles);
     if(fileDialog->exec() == QDialog::Accepted) {
-        gery_flag = false;
          for(QString path : fileDialog->selectedFiles()){
              qDebug()<<path<<endl;
              QImage img;
              img.load(path);
-             Img.insert(make_pair(Num, img));
              QStringList  s = path.split(".");
              qDebug()<<s.last()<<endl;
              QLabel *q = new QLabel;
-             Label.insert(make_pair(Num, q));
              q->setPixmap(QPixmap::fromImage(img));
-             q->setWindowTitle("Unnamed");
+             QString title ;
+             title = "Unnamed" + QString::number(Num) + "." + s.last();
+             Label.insert(make_pair(title, q));
+             Img.insert(make_pair(title, img));
+             q->setWindowTitle(title);
+             qDebug()<<title<<endl;
              qDebug()<<Num<<endl;
+             Num++;
              ui->mdiArea->addSubWindow(q);
              q->setScaledContents(true);
              q->resize(q->width(),q->height());
@@ -66,17 +67,23 @@ void MainWindow::on_action_N_triggered()
 }
 
 void MainWindow::on_pushButton_clicked(){
+    QMdiSubWindow *ql = ui->mdiArea->activeSubWindow();
+    qDebug()<<ql->windowTitle()<<endl;
+    QString title = ql->windowTitle();
+    if(Img.find(title)==Img.end())return;
+    QImage before_img = Img[title];
+    QImage blur_img = Img[title];
     //模糊
     QRgb grb;
     int green1,red1,blue1;
-    int height=blur_img1.height();
-    int width=blur_img1.width();
+    int height=before_img.height();
+    int width=before_img.width();
     for(int i=1;i<height-1;i++){
         for(int j=1;j<width-1;j++){
             int mohur=0,mohug=0,mohub=0;
             for(int k=i-1;k<=i+1;k++){
                 for(int l=j-1;l<=j+1;l++){
-                    grb = blur_img1.pixel(l,k);
+                    grb = before_img.pixel(l,k);
                     red1 = qRed(grb);
                     green1 = qGreen(grb);
                     blue1 = qBlue(grb);
@@ -85,26 +92,24 @@ void MainWindow::on_pushButton_clicked(){
                     mohub+=blue1;
                 }
             }
-            grb = blur_img1.pixel(j,i);
-            blur_img2.setPixel(j,i,qRgb(mohur/9,mohug/9,mohub/9));
+            blur_img.setPixel(j,i,qRgb(mohur/9,mohug/9,mohub/9));
         }
     }
-    QLabel *label3=blur_label;
-    label3->setPixmap(QPixmap::fromImage(blur_img2));
-    if(!blur_flag){
-        ui->mdiArea->addSubWindow(label3);
-        label3->setScaledContents(true);
-        //connect(temp,SIGNAL(destroyed(QObject*)),this,SLOT(close_ruijin()));
-    }
-    blur_flag = true;
-    label3->show();
-    blur_img1=blur_img2;
+    QLabel *q = Label[title];
+    q->setPixmap(QPixmap::fromImage(blur_img));
+    Img[title] = blur_img;
+    q->setScaledContents(true);
+    q->show();
 }
-void MainWindow::close_gery(){
-    gery_flag = false;
-}
+
+//灰度化
 void MainWindow::on_pushButton_2_clicked(){
-    gery_img = before_img;
+    //QMdiSubWindow
+    QMdiSubWindow *ql = ui->mdiArea->activeSubWindow();
+    QString title = ql->windowTitle();
+    if(Img.find(title)==Img.end())return;
+    QImage before_img = Img[title];
+    QImage grey_img = Img[title];
     QRgb rgb;
     int red,green,blue;
     int height = before_img.height();
@@ -116,18 +121,13 @@ void MainWindow::on_pushButton_2_clicked(){
            green = qGreen(rgb);
            blue = qBlue(rgb);
            int gray  = (red+green+blue)/3;
-           gery_img.setPixel(j,i,qRgb(gray,gray,gray));
+           grey_img.setPixel(j,i,qRgb(gray,gray,gray));
         }
     }
-    if(!gery_flag){
-        gery_flag = true;
-        QLabel *q = new QLabel;
-        q->setPixmap(QPixmap::fromImage(gery_img));
-        q->setWindowTitle("灰度图");
-        QMdiSubWindow*tomp= ui->mdiArea->addSubWindow(q);
-        connect(tomp,SIGNAL(destroyed(QObject*)),this,SLOT(close_gery()));
-        q->setScaledContents(true);
-        q->resize(q->width(),q->height());
-        q->show();
-    }
+    QLabel *q = Label[title];
+    q->setPixmap(QPixmap::fromImage(grey_img));
+    Img[title] = grey_img;
+    q->setScaledContents(true);
+    q->resize(q->width(),q->height());
+    q->show();
 }

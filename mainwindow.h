@@ -16,14 +16,12 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    QImage before_img,gery_img,blur_img1,blur_img2;
-    QLabel *blur_label;
-    bool blur_flag,gery_flag;
-
-    map<int, QImage> Img;
-    map<int, QLabel*> Label;
-    int Num;
     ~MainWindow();
+private:
+    map<QString, QImage> Img;
+    map<QString, QLabel*> Label;
+    int Num;
+
 
 private slots:
     void on_action_N_triggered();
@@ -31,8 +29,6 @@ private slots:
     void on_pushButton_clicked();
 
     void on_pushButton_2_clicked();
-
-    void close_gery();
 
 private:
     Ui::MainWindow *ui;
