@@ -32,3 +32,7 @@ FORMS    += mainwindow.ui
 
 RESOURCES += \
     resource.qrc
+TRANSLATIONS+=cn.ts
+TRANSLATIONS+=en.ts
+
+RC_FILE = app.rc

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>慧眼-图片浏览器</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -52,13 +52,18 @@
    </attribute>
    <addaction name="actionnewfile"/>
    <addaction name="actionopenfile"/>
+   <addaction name="actiontranslate_T"/>
+   <addaction name="actioninfo_I"/>
+   <addaction name="separator"/>
+   <addaction name="action_L"/>
+   <addaction name="action_R"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockWidget">
    <property name="minimumSize">
     <size>
      <width>115</width>
-     <height>147</height>
+     <height>217</height>
     </size>
    </property>
    <property name="windowTitle">
@@ -140,6 +145,24 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="maximumSize">
+        <size>
+         <width>80</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>黑白</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -164,6 +187,47 @@
     <string>newfile</string>
    </property>
   </action>
+  <action name="action_L">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/resource/icons/left.ico</normaloff>:/icons/resource/icons/left.ico</iconset>
+   </property>
+   <property name="text">
+    <string>向左(&amp;L)</string>
+   </property>
+  </action>
+  <action name="action_R">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/resource/icons/right.ico</normaloff>:/icons/resource/icons/right.ico</iconset>
+   </property>
+   <property name="text">
+    <string>向右(&amp;R)</string>
+   </property>
+  </action>
+  <action name="actioninfo_I">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/resource/icons/info.ico</normaloff>:/icons/resource/icons/info.ico</iconset>
+   </property>
+   <property name="text">
+    <string>info(&amp;I)</string>
+   </property>
+  </action>
+  <action name="actiontranslate_T">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/resource/icons/language.ico</normaloff>:/icons/resource/icons/language.ico</iconset>
+   </property>
+   <property name="text">
+    <string>translate(&amp;T)</string>
+   </property>
+  </action>
+  <action name="action_N">
+   <property name="text">
+    <string>打开文件(&amp;N)</string>
+   </property>
+  </action>
   <action name="actionopenfile">
    <property name="icon">
     <iconset resource="resource.qrc">
@@ -171,11 +235,6 @@
    </property>
    <property name="text">
     <string>openfile</string>
-   </property>
-  </action>
-  <action name="action_N">
-   <property name="text">
-    <string>打开文件(&amp;N)</string>
    </property>
   </action>
  </widget>
